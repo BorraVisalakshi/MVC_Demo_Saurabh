@@ -1,0 +1,64 @@
+name: MVC_MSbuild
+
+on:
+   workflow_dispatch:
+    
+jobs:
+  build:
+ #  env:
+   # VRWhere_HOME: 'C:\GitHubActions\actions-runner-win-x64-2.284.0\WindowsSystem\_tool\vswhere\2.7.1\x64\vswhere.exe'
+  #  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+   # MS_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe'
+   
+   runs-on: [self-hosted]
+
+   steps:
+   
+    - name: Code Checkout
+      uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+        
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+
+   # - name: MSBuild
+    #  working-directory: src
+     # run: msbuild MyProject.csproj
+      
+    - name: Setup VSWhere.exe
+      uses: warrenbuckley/Setup-VSWhere@v1
+      
+   # - name: Setup MSBuild.exe
+    #  uses: warrenbuckley/Setup-MSBuild@v1
+
+   # - name: Add msbuild to PATH
+    #  uses: microsoft/setup-msbuild@v1.1
+     # id: setup_msbuild
+      #with:
+       # vs-version: "[16.4,)"
+        #msbuild-architecture: x64
+        #vswhere-path: 'C:\GitHubActions\actions-runner-win-x64-2.284.0\WindowsSystem\_tool\vswhere\2.7.1\x64\vswhere.exe'
+    
+    - name: echo msbuild path
+      run: echo "${{ steps.setup_msbuild.outputs.msbuildPath }}"
+
+    - name: echo MSBuild
+      run: msbuild -version
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.5  
+      with:
+           nuget-version: '5.x'
+  
+    - name: Restore NuGet Packages
+      run: nuget restore MVCDemo.sln ;
+      
+    - name: Build
+      run: msbuild "MVCDemo.sln" 
+      
+    - name: Test
+      run: dotnet test UnitTestProject\bin\Debug\UnitTestProject.dll --no-restore
