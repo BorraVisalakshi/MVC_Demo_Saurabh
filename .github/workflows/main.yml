@@ -29,8 +29,17 @@ jobs:
       
     - name: Setup VSWhere.exe
       uses: warrenbuckley/Setup-VSWhere@v1
+      
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1 
+    
+    - name: echo msbuild path in 3rd party
+      run: echo "${{ steps.setup_msbuild.outputs.msbuildPath }}"
 
+    - name: echo MSBuild in 3rd party
+      run: msbuild -version
 
+   
       
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
@@ -43,14 +52,7 @@ jobs:
     - name: echo MSBuild
       run: msbuild -version
     
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1 
     
-    - name: echo msbuild path in 3rd party
-      run: echo "${{ steps.setup_msbuild.outputs.msbuildPath }}"
-
-    - name: echo MSBuild in 3rd party
-      run: msbuild -version
       
    # - name: Setup MSBuild.exe
     #  uses: warrenbuckley/Setup-MSBuild@v1
