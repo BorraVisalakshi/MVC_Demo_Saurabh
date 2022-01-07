@@ -16,66 +16,12 @@ jobs:
     - name: Code Checkout
       uses: actions/checkout@v2
       
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+    - name: Zip actions
+      uses: papeloto/action-zip@v1
       with:
-        dotnet-version: 5.0.x
-        
-
-
-   # - name: MSBuild
-    #  working-directory: src
-     # run: msbuild MyProject.csproj
-      
-    - name: Setup VSWhere.exe
-      uses: warrenbuckley/Setup-VSWhere@v1
-      
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1 
-    
-    - name: echo msbuild path in 3rd party
-      run: echo "${{ steps.setup_msbuild.outputs.msbuildPath }}"
-
-    - name: echo MSBuild in 3rd party
-      run: msbuild -version
-
-   
-      
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-      with:
-        vswhere-path: 'C:\GitHub_Runner\Saurabh\actions-runner-win-x64-2.284.0\_work\_tool\vswhere\2.7.1\x64\'
-
-    - name: echo msbuild path
-      run: echo "${{ steps.setup_msbuild.outputs.msbuildPath }}"
-
-    - name: echo MSBuild
-      run: msbuild -version
-    
-    
-      
-   # - name: Setup MSBuild.exe
-    #  uses: warrenbuckley/Setup-MSBuild@v1
-
-   # - name: Add msbuild to PATH
-    #  uses: microsoft/setup-msbuild@v1.1
-     # id: setup_msbuild
-      #with:
-       # vs-version: "[16.4,)"
-        #msbuild-architecture: x64
-        #vswhere-path: 'C:\GitHubActions\actions-runner-win-x64-2.284.0\WindowsSystem\_tool\vswhere\2.7.1\x64\vswhere.exe'
-    
-      
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5  
-      with:
-           nuget-version: '5.x'
-  
-    - name: Restore NuGet Packages
-      run: nuget restore MVCDemo.sln ;
-      
-    - name: Build
-      run: msbuild "MVCDemo.sln" 
-      
-    - name: Test
-      run: dotnet test UnitTestProject\bin\Debug\UnitTestProject.dll --no-restore
+          files: MVCDemo
+          recursive: false
+          dest: MVCDemo.zip
+          
+    - name: Move zip file
+      run: move MVCDemo.zip C:\GitHub_Runner\Saurabh
